@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {useContext, useState} from 'react'
+import logo from '/logo.svg'
 import './App.css'
+import {AuthContext} from "./store/AuthContext.tsx";
+import {SignUp} from "./firebase/services/AuthService.ts";
+import {UserFormValues} from "./interfaces/interfaces.ts";
+import PageLoading from "./components/PageLoading.tsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const {SignIn, SignOut, user, loading} = useContext(AuthContext);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    return (
+        <>
+            <div>
+                <a href="https://reterics.com" target="_blank">
+                    <img src={logo} className="logo react reterics" alt="Reterics logo"/>
+                </a>
+            </div>
+            <h1>Vite + React + Firebase Auth</h1>
+            {!loading && !user &&
+                <div className="card">
+                    <input name="email" value={email}
+                           onChange={(e) => setEmail(e.target.value)}/>
+                    <br/>
+                    <input name="password" type="password" value={password}
+                           onChange={(e) => setPassword(e.target.value)}/>
+                    <br/>
+                    <button onClick={() => SignIn({email: email, password: password})}>SignIn</button>
+                    <button onClick={() => SignUp({email, password} as UserFormValues)}>SignUp</button>
+                </div>
+            }
+
+            {!loading && user &&
+                <div className="card">
+                    <button onClick={() => SignOut()}>Sign Out</button>
+                </div>
+            }
+
+            {loading && <PageLoading/>}
+
+        </>
+    )
 }
 
 export default App
