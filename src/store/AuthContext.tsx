@@ -9,12 +9,9 @@ import PageLoading from "../components/PageLoading.tsx";
 export const AuthContext = createContext<IAuth>({
     user: firebaseAuth.currentUser,
     loading: false,
-    SignIn: () => {
-    },
-    SignUp: () => {
-    },
-    SignOut: () => {
-    },
+    SignIn: () => {},
+    SignUp: () => {},
+    SignOut: () => {},
 });
 
 
@@ -34,7 +31,7 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                 if (user) {
                     setCurrentUser(user);
                     //redirect the user on the targeted route
-                    navigate('/dashboard', {replace: true});
+                    navigate('/', {replace: true});
                 } else {
                     //TODO: Handle if user is empty
                 }
@@ -54,6 +51,7 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
     }
 
     const SignInMethod = async (creds: LoginFormValues) => {
+        console.log('Sign via', creds)
         setIsLoading(true);
         SignIn(creds)
             .then(userCredential => {
@@ -61,7 +59,7 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                 if (user) {
                     setCurrentUser(user);
                     //redirect user to targeted route
-                    navigate('/dashboard', {replace: true});
+                    navigate('/', {replace: true});
                 } else {
                     // TODO: Handle if user is empty
                 }
