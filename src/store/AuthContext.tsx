@@ -12,6 +12,7 @@ export const AuthContext = createContext<IAuth>({
     SignIn: () => {},
     SignUp: () => {},
     SignOut: () => {},
+    error: null
 });
 
 
@@ -20,6 +21,7 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string|null>(null);
     const navigate = useNavigate();
 
 
@@ -33,18 +35,12 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                     //redirect the user on the targeted route
                     navigate('/', {replace: true});
                 } else {
-                    //TODO: Handle if user is empty
+                    setError("auth/user-not-found");
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                console.error(error);
-                //check for error
-                if (error.code === 'auth/email-already-in-use') {
-                    //show an alert or console
-                } else if (error.code === 'auth/too-many-requests') {
-                    //do something like an alert
-                }
+                setError(error.code);
                 // you can check for more error like email not valid or something
                 setIsLoading(false);
             });
@@ -61,16 +57,12 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                     //redirect user to targeted route
                     navigate('/', {replace: true});
                 } else {
-                    // TODO: Handle if user is empty
+                    setError("auth/user-not-found");
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                console.error(error);
-                //TODO: show error
-
-                if (error.code === 'auth/wrong-password') {}
-                else if (error.code === 'auth/too-many-requests') {}
+                setError(error.code);
                 setIsLoading(false);
             });
     }
@@ -94,6 +86,7 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
         SignIn: SignInMethod,
         SignUp: SignUpMethod,
         SignOut: SignOutMethod,
+        error: error
     }
 
     useEffect(() => {

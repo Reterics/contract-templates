@@ -19,4 +19,5 @@ export  interface  IAuth {
     SignIn: (credentials:  LoginFormValues) =>  void;
     SignUp: (credentials:  UserFormValues) =>  void;
     SignOut: () =>  void;
+    error: string | null
 }

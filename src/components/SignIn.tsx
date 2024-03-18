@@ -4,9 +4,10 @@ import {UserFormValues} from "../interfaces/interfaces.ts";
 import {useContext, useState} from "react";
 import {AuthContext} from "../store/AuthContext.tsx";
 import '../App.css';
+import AlertBox from "./AlertBox.tsx";
 
 const SignInComponent = () => {
-    const {SignIn, loading} = useContext(AuthContext);
+    const {SignIn, loading, error} = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,6 +23,8 @@ const SignInComponent = () => {
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                             Sign in to your account
                         </h1>
+                        {error && <AlertBox title={'Error'} message={error} role='alert'/>}
+
                         {loading &&
                             <div role="status" className="text-center">
                                 <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +64,6 @@ const SignInComponent = () => {
                             </div>
                             <button
                                     onClick={() => {
-console.log('sdasd');
                                         SignIn({email: email, password: password})
                                     }}
                                     className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
