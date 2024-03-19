@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import {SignIn, SignOut, SignUp} from "../firebase/services/AuthService.ts";
 import {onAuthStateChanged, User} from 'firebase/auth';
 import PageLoading from "../components/PageLoading.tsx";
+import {FIREBASE_ERRORS} from "./FirebaseErrors.ts";
 
 export const AuthContext = createContext<IAuth>({
     user: firebaseAuth.currentUser,
@@ -17,13 +18,15 @@ export const AuthContext = createContext<IAuth>({
 
 
 const AuthProvider = ({children}: { children: React.ReactNode }) => {
-
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
     const [error, setError] = useState<string|null>(null);
     const navigate = useNavigate();
 
+    const setTranslatedError = (code: string) => {
+        setError(FIREBASE_ERRORS[code as keyof typeof FIREBASE_ERRORS] || code);
+    };
 
     const SignUpMethod = (credentials: UserFormValues) => {
         setIsLoading(true);
@@ -35,12 +38,12 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                     //redirect the user on the targeted route
                     navigate('/', {replace: true});
                 } else {
-                    setError("auth/user-not-found");
+                    setTranslatedError("auth/user-not-found");
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                setError(error.code);
+                setTranslatedError(error.code);
                 // you can check for more error like email not valid or something
                 setIsLoading(false);
             });
@@ -57,12 +60,12 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
                     //redirect user to targeted route
                     navigate('/', {replace: true});
                 } else {
-                    setError("auth/user-not-found");
+                    setTranslatedError("auth/user-not-found");
                 }
                 setIsLoading(false);
             })
             .catch(error => {
-                setError(error.code);
+                setTranslatedError(error.code);
                 setIsLoading(false);
             });
     }
