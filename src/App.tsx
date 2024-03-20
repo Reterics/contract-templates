@@ -1,5 +1,4 @@
 import {useContext} from 'react'
-import logo from '/logo.svg'
 import './App.css'
 import {AuthContext} from "./store/AuthContext.tsx";
 import PageLoading from "./components/PageLoading.tsx";
@@ -14,11 +13,6 @@ function App() {
     return (
         <>
             <Header />
-            <div>
-                <a href="https://reterics.com" target="_blank">
-                    <img src={logo} className="logo react reterics" alt="Reterics logo"/>
-                </a>
-            </div>
             <h1>Vite + React + Firebase Auth + TailwindCSS</h1>
             {loading && <PageLoading/>}
 

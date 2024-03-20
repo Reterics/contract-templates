@@ -21,3 +21,7 @@ export  interface  IAuth {
     SignOut: () =>  void;
     error: string | null
 }
+
+export interface Template {
+    id: string
+}
