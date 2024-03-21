@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth'; //type User import
+import { User } from 'firebase/auth';
 
 
 export interface LoginFormValues {
@@ -24,4 +24,18 @@ export  interface  IAuth {
 
 export interface Template {
     id: string
+}
+
+export interface GeneralModalArguments {
+    visible:boolean
+    onClose: Function
+    title: string
+    onSave: Function
+    buttons?: GeneralModalButtons[]
+    children: React.ReactNode
+}
+export interface GeneralModalButtons {
+    value: string
+    onClick: Function
+    primary: boolean
 }
