@@ -8,7 +8,7 @@ export default function GeneralModal({
     children
 } :GeneralModalArguments
 ) {
-    if (!visible) return null;
+    if (visible === false) return null;
 
     return (
         <div
@@ -16,9 +16,9 @@ export default function GeneralModal({
             className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm
             flex justify-center items-center"
         >
-            <div className="bg-white p-4 rounded w-[90vw] dark:bg-gray-900">
+            <div className="bg-white p-4 rounded dark:bg-gray-900 min-w-[50vw]">
                 <h1 className="font-semibold text-center text-xl text-gray-700 mb-4 dark:text-gray-200">
-                    {title}
+                    {title || ''}
                 </h1>
 
                 <form className="flex flex-col">

@@ -7,11 +7,13 @@ import {db, firebaseCollections, getCollection} from "./firebase/BaseConfig.ts";
 import {Template} from "./interfaces/interfaces.ts";
 import {BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc} from "firebase/firestore";
+import TemplateModal from "./components/modals/TemplateModal.tsx";
 
 
 function Templates() {
     const {user, loading} = useContext(AuthContext);
     const [templates, setTemplates] = useState([] as Template[]);
+    const [showModal, setShowModal] = useState(false);
 
     if (!user) return <SignInComponent />;
 
@@ -39,7 +41,7 @@ function Templates() {
                             className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none
                             focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2
                             dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-                            onClick={() => alert('To be implemented')}
+                            onClick={() => setShowModal(true)}
                     >
                         Create Template
                     </button>
@@ -76,6 +78,7 @@ function Templates() {
                     </tbody>
                 </table>
             </div>
+            <TemplateModal visible={showModal} onClose={()=>setShowModal(false)}/>
         </>
     )
 }
