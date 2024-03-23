@@ -26,6 +26,12 @@ export  interface  IAuth {
 export interface Template {
     id: string
     name?: string
+    path?: string
+}
+
+export interface TemplateRaw {
+    file: File,
+    document: Template
 }
 
 export interface GeneralModalArguments {
@@ -49,7 +55,7 @@ export interface GeneralModalButtons {
 }
 
 
-export interface CTInputArgs {
+export interface StyledInputArgs {
     value?: string | number | readonly string[]
     onChange?: ChangeEventHandler<HTMLInputElement> | undefined,
     type?: string,
@@ -62,15 +68,15 @@ export interface CTInputArgs {
     max?: string,
     step?: string,
 }
-export interface CTSelectOption {
+export interface StyledSelectOption {
     name: string,
     value: string
 }
-export interface CTSelectArgs {
+export interface StyledSelectArgs {
     value?: string | number | readonly string[]
     onSelect?: ReactEventHandler<HTMLSelectElement> | undefined,
     type?: string,
     name?: string,
     label?: string|number,
-    options: CTSelectOption[]
+    options: StyledSelectOption[]
 }

@@ -1,12 +1,12 @@
-import {CTSelectArgs, CTSelectOption} from "../../interfaces/interfaces.ts";
+import {StyledSelectArgs, StyledSelectOption} from "../../interfaces/interfaces.ts";
 
-export const textToOptions = (strings: string[], names: string[]|undefined):  CTSelectOption[] => {
+export const textToOptions = (strings: string[], names: string[]|undefined):  StyledSelectOption[] => {
     return strings.map((string, index) => {
         return {value: string, name: names ? names[index] : string}
     });
 }
 
-export default function CTSelect({ value, onSelect, name, label, options }: CTSelectArgs) {
+export default function StyledSelect({ value, onSelect, name, label, options }: StyledSelectArgs) {
     return (
         <div className="relative z-0 w-full group mt-4">
             <select name={name}

@@ -4,10 +4,11 @@ import SignInComponent from "./components/SignIn.tsx";
 import Header from "./components/Header.tsx";
 import PageLoading from "./components/PageLoading.tsx";
 import {db, firebaseCollections, getCollection} from "./firebase/BaseConfig.ts";
-import {Template} from "./interfaces/interfaces.ts";
+import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
 import {BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
-import {doc, deleteDoc} from "firebase/firestore";
+import {doc, deleteDoc, collection, setDoc} from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
+import {uploadFile} from "./firebase/storage.ts";
 
 
 function Templates() {
@@ -31,6 +32,21 @@ function Templates() {
     useEffect(() => {
         void refreshCollections();
     }, []);
+
+    const closeTemplate = async (templateData?: TemplateRaw)=> {
+        setShowModal(false);
+
+        if (templateData && templateData.document.path) {
+            await uploadFile(templateData.document.path, templateData.file);
+        }
+
+        if (templateData && templateData.document) {
+            const modelRef = doc(collection(db, firebaseCollections.templates))
+            await setDoc(modelRef, templateData.document, { merge: true });
+
+        }
+    }
+
     return (
         <>
             <Header />
@@ -78,7 +94,7 @@ function Templates() {
                     </tbody>
                 </table>
             </div>
-            <TemplateModal visible={showModal} onClose={()=>setShowModal(false)}/>
+            <TemplateModal visible={showModal} onClose={(template: TemplateRaw)=>closeTemplate(template)}/>
         </>
     )
 }

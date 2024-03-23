@@ -1,6 +1,6 @@
-import {CTInputArgs} from "../../interfaces/interfaces.ts";
+import {StyledInputArgs} from "../../interfaces/interfaces.ts";
 
-export default function CTInput({
+export default function StyledInput({
     value,
     onChange,
     type = "text",
@@ -11,7 +11,7 @@ export default function CTInput({
     maxLength,
     min,
     max
-}: CTInputArgs) {
+}: StyledInputArgs) {
     // TODO: Pattern validation
 
     const validateOnFocusLoss = () => {
