@@ -42,8 +42,10 @@ function Templates() {
 
         if (templateData && templateData.document) {
             const modelRef = doc(collection(db, firebaseCollections.templates))
-            await setDoc(modelRef, templateData.document, { merge: true });
-
+            await setDoc(modelRef, templateData.document, { merge: true }).catch(e=>{
+                console.error(e);
+            });
+            await refreshCollections();
         }
     }
 
