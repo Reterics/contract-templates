@@ -80,6 +80,12 @@ function Templates() {
                             ID
                         </th>
                         <th scope="col" className="px-6 py-3">
+                            Name
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Path
+                        </th>
+                        <th scope="col" className="px-6 py-3">
                             Action
                         </th>
                     </tr>
@@ -91,6 +97,14 @@ function Templates() {
                             <th scope="row"
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {template.id}
+                            </th>
+                            <th scope="row"
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {template.name || ''}
+                            </th>
+                            <th scope="row"
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {template.path ? template.path.replace('files/', '') : 'No file'}
                             </th>
                             <td className="px-6 py-4 flex flex-row text-lg">
                                 <BsFileText className="cursor-pointer ml-2" onClick={() => openEditor(template)}/>

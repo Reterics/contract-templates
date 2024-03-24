@@ -7,6 +7,7 @@ import {getFileURL} from "./firebase/storage.ts";
 import {REGEXPS} from "@redaty/lejs/dist/constants"
 import {render} from "@redaty/lejs"
 import StyledInput from "./components/elements/StyledInput.tsx";
+import {downloadAsFile} from "./utils/general.ts";
 
 
 const Editor = () => {
@@ -61,6 +62,10 @@ const Editor = () => {
         })
     }
 
+    const download = () => {
+        downloadAsFile(template.path ? template.path.replace('files/', '') : '', renderedContent);
+    }
+
     return (
         <>
             <Header />
@@ -81,7 +86,7 @@ const Editor = () => {
                         {renderedContent}
                     </div>
                 </div>
-
+                <button type="button" onClick={()=>download()}>Download</button>
             </form>
         </>
     );
