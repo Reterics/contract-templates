@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@redaty/lejs':
+    specifier: 1.0.5
+    version: 1.0.5
   '@types/node':
     specifier: ^20.11.28
     version: 20.11.28
@@ -1143,6 +1146,11 @@ packages:
 
   /@protobufjs/utf8@1.1.0:
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
+    dev: false
+
+  /@redaty/lejs@1.0.5:
+    resolution: {integrity: sha512-BIV+5x6x4uWw4fulBcSoeUM0/w+0mhj0ZMdhNWI0bNvo0JpwcOWsxk4AekM/uXbNcVEnfHZ4nuRwg0SfE5TcFQ==}
+    hasBin: true
     dev: false
 
   /@remix-run/router@1.15.3:

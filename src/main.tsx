@@ -6,6 +6,7 @@ import AuthProvider from './store/AuthContext.tsx'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SignInComponent from "./components/SignIn.tsx";
 import Templates from "./Templates.tsx";
+import Editor from "./Editor.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                   <Route path="/" element={<App />}/>
                   <Route path="/signin" element={<SignInComponent />}/>
                   <Route path="/templates" element={<Templates />}/>
+                  <Route path="/editor" element={<Editor />}/>
               </Routes>
           </AuthProvider>
       </BrowserRouter>

@@ -27,6 +27,11 @@ export interface Template {
     id: string
     name?: string
     path?: string
+    content?: string
+}
+
+export interface GeneralStringObject {
+    [key: string]: string
 }
 
 export interface TemplateRaw {

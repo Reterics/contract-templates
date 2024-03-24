@@ -5,16 +5,18 @@ import Header from "./components/Header.tsx";
 import PageLoading from "./components/PageLoading.tsx";
 import {db, firebaseCollections, getCollection} from "./firebase/BaseConfig.ts";
 import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
-import {BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
+import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc, collection, setDoc} from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
 import {uploadFile} from "./firebase/storage.ts";
+import {useNavigate} from "react-router-dom";
 
 
 function Templates() {
     const {user, loading} = useContext(AuthContext);
     const [templates, setTemplates] = useState([] as Template[]);
     const [showModal, setShowModal] = useState(false);
+    const navigate = useNavigate();
 
     if (!user) return <SignInComponent />;
 
@@ -47,6 +49,10 @@ function Templates() {
             });
             await refreshCollections();
         }
+    }
+
+    const openEditor = (template: Template) => {
+        navigate("/editor?id=" + template.id);
     }
 
     return (
@@ -87,6 +93,7 @@ function Templates() {
                                 {template.id}
                             </th>
                             <td className="px-6 py-4 flex flex-row text-lg">
+                                <BsFileText className="cursor-pointer ml-2" onClick={() => openEditor(template)}/>
                                 <BsPencilSquare className="cursor-pointer ml-2" onClick={() => alert('To be implemented')}/>
                                 <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
                                     deleteTemplate(template.id)}/>
