@@ -95,7 +95,7 @@ function Templates() {
                         <tr key={template.id} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
 
                             <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white p-2">
                                 {template.id}
                             </th>
                             <th scope="row"
@@ -106,9 +106,9 @@ function Templates() {
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {template.path ? template.path.replace('files/', '') : 'No file'}
                             </th>
-                            <td className="px-6 py-4 flex flex-row text-lg">
-                                <BsFileText className="cursor-pointer ml-2" onClick={() => openEditor(template)}/>
-                                <BsPencilSquare className="cursor-pointer ml-2" onClick={() => alert('To be implemented')}/>
+                            <td className="px-6 py-4 flex flex-row text-lg p-2">
+                                <BsFileText className="cursor-pointer ml-2 mr-1" onClick={() => openEditor(template)}/>
+                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={() => alert('To be implemented')}/>
                                 <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
                                     deleteTemplate(template.id)}/>
                             </td>
