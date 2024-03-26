@@ -8,7 +8,7 @@ import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
 import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc, collection, setDoc} from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
-import {uploadFile} from "./firebase/storage.ts";
+import {deleteFile, uploadFile} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
 
 
@@ -22,11 +22,7 @@ function Templates() {
 
     if (loading) return (<><Header /><PageLoading/></>);
 
-    const deleteTemplate = async (id?: string) => {
-        if (id && window.confirm('Are you sure you wish to delete this Invoice?')) {
-            await deleteDoc(doc(db, firebaseCollections.templates, id));
-        }
-    };
+
     const refreshCollections = async () => {
         const templates = await getCollection(firebaseCollections.templates);
         setTemplates(templates as Template[]);
@@ -34,6 +30,17 @@ function Templates() {
     useEffect(() => {
         void refreshCollections();
     }, []);
+
+    const deleteTemplate = async (template: Template) => {
+        if (template.id && window.confirm('Are you sure you wish to delete this Invoice?')) {
+            await deleteDoc(doc(db, firebaseCollections.templates, template.id));
+            if (template.path) {
+                await deleteFile(template.path)
+            }
+
+            await refreshCollections();
+        }
+    };
 
     const closeTemplate = async (templateData?: TemplateRaw)=> {
         setShowModal(false);
@@ -110,7 +117,7 @@ function Templates() {
                                 <BsFileText className="cursor-pointer ml-2 mr-1" onClick={() => openEditor(template)}/>
                                 <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={() => alert('To be implemented')}/>
                                 <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
-                                    deleteTemplate(template.id)}/>
+                                    deleteTemplate(template)}/>
                             </td>
                         </tr>
                     )}

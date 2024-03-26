@@ -1,4 +1,4 @@
-import { getDownloadURL, getStorage, ref, uploadBytes, UploadResult, uploadString } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes, UploadResult, uploadString, deleteObject } from "firebase/storage";
 import app from "./BaseConfig.ts";
 
 export const storage = getStorage(app);
@@ -36,4 +36,9 @@ export const uploadFileString = (path: string, message: string): Promise<UploadR
 export const getFileURL = (path: string): Promise<string> => {
     const storageRef  = ref(storage, path);
     return getDownloadURL(storageRef);
+}
+
+export const deleteFile = (path: string): Promise<void> => {
+    const deleteRef = ref(storage, path);
+    return deleteObject(deleteRef);
 }
