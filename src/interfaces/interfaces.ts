@@ -52,6 +52,7 @@ export interface ModalArguments {
     visible?:boolean
     title?: string
     onClose?: Function
+    selected?: null|Template
 }
 export interface GeneralModalButtons {
     value: string

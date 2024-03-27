@@ -6,7 +6,7 @@ import PageLoading from "./components/PageLoading.tsx";
 import {db, firebaseCollections, getCollection} from "./firebase/BaseConfig.ts";
 import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
 import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
-import {doc, deleteDoc, collection, setDoc} from "firebase/firestore";
+import {doc, deleteDoc, collection, setDoc } from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
 import {deleteFile, uploadFile} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
@@ -16,6 +16,7 @@ function Templates() {
     const {user, loading} = useContext(AuthContext);
     const [templates, setTemplates] = useState([] as Template[]);
     const [showModal, setShowModal] = useState(false);
+    const [modalTemplate, setModalTemplate] = useState<Template|null>(null)
     const navigate = useNavigate();
 
     if (!user) return <SignInComponent />;
@@ -45,7 +46,7 @@ function Templates() {
     const closeTemplate = async (templateData?: TemplateRaw)=> {
         setShowModal(false);
 
-        if (templateData && templateData.document.path) {
+        if (templateData && templateData.document.path && templateData.file) {
             await uploadFile(templateData.document.path, templateData.file);
         }
 
@@ -56,6 +57,7 @@ function Templates() {
             });
             await refreshCollections();
         }
+        setModalTemplate(null);
     }
 
     const openEditor = (template: Template) => {
@@ -115,7 +117,7 @@ function Templates() {
                             </th>
                             <td className="px-6 py-4 flex flex-row text-lg p-2">
                                 <BsFileText className="cursor-pointer ml-2 mr-1" onClick={() => openEditor(template)}/>
-                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={() => alert('To be implemented')}/>
+                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={() => {setModalTemplate(template); setShowModal(true)}}/>
                                 <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
                                     deleteTemplate(template)}/>
                             </td>
@@ -124,7 +126,7 @@ function Templates() {
                     </tbody>
                 </table>
             </div>
-            <TemplateModal visible={showModal} onClose={(template: TemplateRaw)=>closeTemplate(template)}/>
+            <TemplateModal visible={showModal} onClose={(template: TemplateRaw)=>closeTemplate(template)} selected={modalTemplate}/>
         </>
     )
 }

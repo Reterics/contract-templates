@@ -8,13 +8,13 @@ import StyledFile from "../elements/StyledFile.tsx";
 export default function TemplateModal({
     visible,
     onClose,
-    title
-
+    title,
+    selected
 } :ModalArguments) {
 
     if (visible === false) return null;
 
-    const [template, setTemplate] = useState<Template>({id: ""});
+    const [template, setTemplate] = useState<Template>(selected || {id: ""});
     const [file, setFile] = useState<File|null>(null)
 
     const changeType = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
@@ -27,17 +27,20 @@ export default function TemplateModal({
     };
 
     const uploadAndClose = ()=> {
-        if (!file) {
+        if (!file && !template.path) {
             alert('You need to upload a file for creating a template')
             return;
         }
-        const extension = file.name.substring(file.name.lastIndexOf('.'));
+        if (file) {
+
+        }
+        const extension = file ? file.name.substring(file.name.lastIndexOf('.')): '';
 
         const rawDocument = {
             file: file,
             document: {
                 ...template,
-                path: 'files/' + (template.name || '') + extension
+                path: file ? 'files/' + (template.name || '') + extension : template.path
             }
         };
         if (typeof onClose === "function"){
@@ -75,7 +78,9 @@ export default function TemplateModal({
                     onChange={(e) => changeType(e, 'name')}
                     label="Template name"
                 />
-                <StyledFile name="model" label="Model" onChange={(file: File)=>setFile(file)} />
+                <StyledFile name="model" label={"Model " +
+                    (template.path ? "("+template.path.replace('files/','')+")" : "")
+                } onChange={(file: File)=>setFile(file)} />
 
             </div>
         </GeneralModal>
