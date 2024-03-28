@@ -8,7 +8,7 @@ import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
 import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc, collection, setDoc } from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
-import {deleteFile, uploadFile, uploadFileString} from "./firebase/storage.ts";
+import {deleteFile, getFileFromStorage, uploadFile, uploadFileString} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
 
 
@@ -122,7 +122,15 @@ function Templates() {
                             </th>
                             <td className="px-6 py-4 flex flex-row text-lg p-2">
                                 <BsFileText className="cursor-pointer ml-2 mr-1" onClick={() => openEditor(template)}/>
-                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={() => {setModalTemplate(template); setShowModal(true)}}/>
+                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={async () => {
+                                    if (template && template.id) {
+                                        const tmp = await getFileFromStorage(template.id);
+                                        if (tmp && tmp.content) {
+                                            template.content = tmp.content;
+                                        }
+                                    }
+                                    setModalTemplate(template);
+                                    setShowModal(true)}}/>
                                 <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
                                     deleteTemplate(template)}/>
                             </td>

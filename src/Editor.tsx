@@ -1,9 +1,8 @@
 import {useSearchParams} from "react-router-dom";
-import {firebaseCollections, getById} from "./firebase/BaseConfig.ts";
 import {useEffect, useState} from "react";
 import {GeneralStringObject, Template} from "./interfaces/interfaces.ts";
 import Header from "./components/Header.tsx";
-import {getFileURL} from "./firebase/storage.ts";
+import {getFileFromStorage} from "./firebase/storage.ts";
 import {REGEXPS} from "@redaty/lejs/dist/constants"
 import {render} from "@redaty/lejs"
 import StyledInput from "./components/elements/StyledInput.tsx";
@@ -18,22 +17,12 @@ const Editor = () => {
     const [formData, setFormData] = useState<GeneralStringObject>({});
 
     const updateFromCloud = async (id: string) => {
-        const template = await getById(id, firebaseCollections.templates) as Template;
+        const template = await getFileFromStorage(id);
         if (template) {
-
-            const url = template.path;
-            if (url) {
-                const response = await fetch(await getFileURL(url));
-                if (response && response.ok) {
-                    const content = await response.text();
-                    if (content) {
-                        template.content = content;
-                    }
-                }
-            }
             setTemplate({ ...template } as Template);
         }
     };
+
     useEffect(() => {
         if (id && !template) {
             void updateFromCloud(id);

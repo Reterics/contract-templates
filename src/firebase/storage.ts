@@ -1,5 +1,6 @@
 import { getDownloadURL, getStorage, ref, uploadBytes, UploadResult, uploadString, deleteObject } from "firebase/storage";
-import app from "./BaseConfig.ts";
+import app, {firebaseCollections, getById} from "./BaseConfig.ts";
+import {Template} from "../interfaces/interfaces.ts";
 
 export const storage = getStorage(app);
 
@@ -41,4 +42,23 @@ export const getFileURL = (path: string): Promise<string> => {
 export const deleteFile = (path: string): Promise<void> => {
     const deleteRef = ref(storage, path);
     return deleteObject(deleteRef);
+}
+
+export const getFileFromStorage = async (id: string) => {
+    const template = await getById(id, firebaseCollections.templates) as Template;
+    if (template) {
+
+        const url = template.path;
+        if (url) {
+            const response = await fetch(await getFileURL(url));
+            if (response && response.ok) {
+                const content = await response.text();
+                if (content) {
+                    template.content = content;
+                }
+            }
+        }
+        return { ...template } as Template
+    }
+    return null;
 }
