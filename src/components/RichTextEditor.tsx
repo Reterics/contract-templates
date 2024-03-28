@@ -22,6 +22,11 @@ const RichTextEditor = ({text, setText}: {text?: string, setText?: Function}) =>
     return (
         <>
             <Editor
+                init={{plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                    ]}}
                 apiKey={import.meta.env.VITE_TINYMCE}
                 initialValue={text}
                 onInit={(_evt, editor) => editorRef.current = editor}

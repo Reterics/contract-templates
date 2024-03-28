@@ -7,7 +7,7 @@ import {REGEXPS} from "@redaty/lejs/dist/constants"
 import {render} from "@redaty/lejs"
 import StyledInput from "./components/elements/StyledInput.tsx";
 import {downloadAsFile} from "./utils/general.ts";
-
+import "./Editor.css";
 
 const Editor = () => {
     let [searchParams] = useSearchParams();
@@ -52,7 +52,10 @@ const Editor = () => {
     }
 
     const download = () => {
-        downloadAsFile(template.path ? template.path.replace('files/', '') : '', renderedContent);
+        downloadAsFile(template.path ? template.path
+                .replace('files/', '')
+                .replace('.txt', '.html')
+            : '', renderedContent);
     }
 
     return (
@@ -75,9 +78,7 @@ const Editor = () => {
                     ))}
                 </div>
                 <div className="flex-col w-full p-2">
-                    <div>
-                        {renderedContent}
-                    </div>
+                    <div className="bg-white text-black a4-print" dangerouslySetInnerHTML={{__html: renderedContent}} />
                 </div>
             </form>
             <button type="button"
