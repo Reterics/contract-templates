@@ -36,6 +36,7 @@ export interface GeneralStringObject {
 
 export interface TemplateRaw {
     file: File,
+    html?: string,
     document: Template
 }
 

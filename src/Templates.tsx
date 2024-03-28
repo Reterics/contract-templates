@@ -8,7 +8,7 @@ import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
 import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc, collection, setDoc } from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
-import {deleteFile, uploadFile} from "./firebase/storage.ts";
+import {deleteFile, uploadFile, uploadFileString} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
 
 
@@ -48,6 +48,11 @@ function Templates() {
 
         if (templateData && templateData.document.path && templateData.file) {
             await uploadFile(templateData.document.path, templateData.file);
+        } else if (templateData && templateData.html) {
+            if (!templateData.document.path) {
+                templateData.document.path = "files/document_" + (new Date().getTime()) + ".html";
+            }
+            await uploadFileString(templateData.document.path, templateData.html);
         }
 
         if (templateData && templateData.document) {
