@@ -1,5 +1,5 @@
 import {useSearchParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {GeneralStringObject, Template} from "./interfaces/interfaces.ts";
 import Header from "./components/Header.tsx";
 import {getFileFromStorage} from "./firebase/storage.ts";
@@ -8,6 +8,8 @@ import {render} from "@redaty/lejs"
 import StyledInput from "./components/elements/StyledInput.tsx";
 import {downloadAsFile} from "./utils/general.ts";
 import "./Editor.css";
+import {BsFillFileEarmarkFill, BsFillPrinterFill, BsFloppyFill } from "react-icons/bs";
+
 
 const Editor = () => {
     let [searchParams] = useSearchParams();
@@ -15,6 +17,7 @@ const Editor = () => {
     const id = searchParams && searchParams.get('id') ?  searchParams.get('id') : undefined;
     const [template, setTemplate] = useState<Template|null>(null);
     const [formData, setFormData] = useState<GeneralStringObject>({});
+    const targetRef = useRef(null);
 
     const updateFromCloud = async (id: string) => {
         const template = await getFileFromStorage(id);
@@ -58,12 +61,41 @@ const Editor = () => {
             : '', renderedContent);
     }
 
+    const print = () => {
+        if (window && window.print) {
+            window.print();
+        }
+    };
+
     return (
         <>
             <Header />
-            <h1>{template?.name || 'Template'}</h1>
-            <form className="flex flex-row p-4 mt-4">
-                <div className="flex-col w-full p-2">
+            <div className="flex flex-row justify-between mt-4 no-print pb-4">
+                <div></div>
+                <div>
+                    <h1>{template?.name || 'Template'}</h1>
+                </div>
+                <div>
+                    <div className="inline-flex rounded-md shadow-sm" role="group">
+                        <button type="button"
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <BsFillFileEarmarkFill />
+                        </button>
+                        <button type="button"
+                                onClick={()=>download()}
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <BsFloppyFill />
+                        </button>
+                        <button type="button"
+                                onClick={()=>print()}
+                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                            <BsFillPrinterFill />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <form className="flex flex-row">
+                <div className="flex-col w-full p-2 no-print">
 
                     {variableKeys.map((key, index)=>(
                         <div className="flex text-right" key={'input_'+index}>
@@ -77,17 +109,13 @@ const Editor = () => {
 
                     ))}
                 </div>
-                <div className="flex-col w-full p-2">
-                    <div className="bg-white text-black a4-print" dangerouslySetInnerHTML={{__html: renderedContent}} />
+                <div className="flex-col w-full">
+                    <div className="bg-white text-black a4-print printable"
+                         ref={targetRef}
+                         dangerouslySetInnerHTML={{__html: renderedContent}} />
                 </div>
             </form>
-            <button type="button"
-                    className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100
-            focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800
-            dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600
-            dark:focus:ring-gray-700"
-                    onClick={()=>download()}>
-                Download</button>
+
         </>
     );
 }
