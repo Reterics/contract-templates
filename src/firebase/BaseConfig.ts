@@ -13,7 +13,8 @@ const  app  =  initializeApp({
 });
 
 export const firebaseCollections = {
-    templates: import.meta.env.VITE_FIREBASE_DB_TEMPLATES || 'templates'
+    templates: import.meta.env.VITE_FIREBASE_DB_TEMPLATES || 'templates',
+    documents: import.meta.env.VITE_FIREBASE_DB_DOCUMENTS || 'documents',
 };
 
 export const firebaseAuth = getAuth(app);

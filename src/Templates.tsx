@@ -33,7 +33,7 @@ function Templates() {
     }, []);
 
     const deleteTemplate = async (template: Template) => {
-        if (template.id && window.confirm('Are you sure you wish to delete this Invoice?')) {
+        if (template.id && window.confirm('Are you sure you wish to delete this Template?')) {
             await deleteDoc(doc(db, firebaseCollections.templates, template.id));
             if (template.path) {
                 await deleteFile(template.path)

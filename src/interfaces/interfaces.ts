@@ -29,10 +29,18 @@ export interface Template {
     path?: string
     content?: string
 }
-
 export interface GeneralStringObject {
     [key: string]: string
 }
+
+export interface ContractDocument {
+    id: string
+    name?: string
+    created?: string
+    template?: string
+    content?: GeneralStringObject
+}
+
 
 export interface TemplateRaw {
     file: File,
