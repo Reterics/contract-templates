@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import {ChangeEventHandler, ReactEventHandler} from "react";
+import {ChangeEventHandler, MouseEventHandler, ReactEventHandler} from "react";
 
 
 export interface LoginFormValues {
@@ -48,13 +48,36 @@ export interface TemplateRaw {
     document: Template
 }
 
-export interface GeneralModalArguments {
+export interface TSXComponentArgument {
+    children?: React.ReactNode
+}
+
+export type TableLineElementType = string | React.ReactNode;
+export type TableLineType = TableLineElementType[];
+
+export interface TableViewLineArguments {
+    line: TableLineType, index: number
+}
+
+export interface TableViewActionArguments extends TSXComponentArgument {
+    onPaste?: MouseEventHandler<HTMLButtonElement>
+    onEdit?: MouseEventHandler<HTMLButtonElement>
+    onRemove?: MouseEventHandler<HTMLButtonElement>
+    onCreate?: MouseEventHandler<HTMLButtonElement>
+    onPrint?: MouseEventHandler<HTMLButtonElement>
+    onSave?: MouseEventHandler<HTMLButtonElement>
+}
+export interface TableViewArguments extends TSXComponentArgument {
+    lines: TableLineType[]
+    header?: string[]
+}
+
+export interface GeneralModalArguments extends TSXComponentArgument{
     visible?:boolean
     onClose?: Function
     title?: string
     onSave?: Function
     buttons?: GeneralModalButtons[]
-    children: React.ReactNode
 }
 
 export interface ModalArguments {

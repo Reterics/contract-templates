@@ -5,11 +5,11 @@ import Header from "./components/Header.tsx";
 import PageLoading from "./components/PageLoading.tsx";
 import {db, firebaseCollections, getCollection} from "./firebase/BaseConfig.ts";
 import {Template, TemplateRaw} from "./interfaces/interfaces.ts";
-import {BsFileText, BsFillTrashFill, BsPencilSquare} from "react-icons/bs";
 import {doc, deleteDoc, collection, setDoc } from "firebase/firestore";
 import TemplateModal from "./components/modals/TemplateModal.tsx";
 import {deleteFile, getFileFromStorage, uploadFile, uploadFileString} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
+import TableViewComponent, {TableViewActions} from "./components/elements/TableViewComponent.tsx";
 
 
 function Templates() {
@@ -74,6 +74,27 @@ function Templates() {
         navigate("/editor?id=" + template.id);
     }
 
+    const tableLines = templates.map(template=> {
+        return [
+            template.id,
+            template.name || '',
+            template.path ? template.path.replace('files/', '') : 'No file',
+            TableViewActions({
+                onPaste: () => openEditor(template),
+                onEdit: async () => {
+                    if (template && template.id) {
+                        const tmp = await getFileFromStorage(template.id);
+                        if (tmp && tmp.content) {
+                            template.content = tmp.content;
+                        }
+                    }
+                    setModalTemplate(template);
+                    setShowModal(true)},
+                onRemove: () => deleteTemplate(template)
+            })
+        ];
+    });
+
     return (
         <>
             <Header />
@@ -92,61 +113,11 @@ function Templates() {
             </div>
 
             <div className="flex justify-center overflow-x-auto shadow-md sm:rounded-lg w-full m-auto mt-2">
-                <table className="text-sm text-left text-gray-500 dark:text-gray-400 max-w-screen-xl w-full">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" className="px-6 py-3">
-                            ID
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Name
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Path
-                        </th>
-                        <th scope="col" className="px-6 py-3">
-                            Action
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {templates.map((template) =>
-                        <tr key={template.id} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white p-2">
-                                {template.id}
-                            </th>
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {template.name || ''}
-                            </th>
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {template.path ? template.path.replace('files/', '') : 'No file'}
-                            </th>
-                            <td className="px-6 py-4 flex flex-row text-lg p-2">
-                                <BsFileText className="cursor-pointer ml-2 mr-1" onClick={() => openEditor(template)}/>
-                                <BsPencilSquare className="cursor-pointer ml-2 mr-1" onClick={async () => {
-                                    if (template && template.id) {
-                                        const tmp = await getFileFromStorage(template.id);
-                                        if (tmp && tmp.content) {
-                                            template.content = tmp.content;
-                                        }
-                                    }
-                                    setModalTemplate(template);
-                                    setShowModal(true)}}/>
-                                <BsFillTrashFill className="cursor-pointer ml-2" onClick={() =>
-                                    deleteTemplate(template)}/>
-                            </td>
-                        </tr>
-                    )}
-                    </tbody>
-                </table>
+                <TableViewComponent lines={tableLines} header={['ID', 'Name', 'Path', 'Action']}/>
             </div>
             <TemplateModal visible={showModal} onClose={(template: TemplateRaw)=>closeTemplate(template)} selected={modalTemplate}/>
         </>
     )
 }
 
-export default Templates
+export default Templates;
