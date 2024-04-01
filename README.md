@@ -1,6 +1,6 @@
 # Contract Templates
 
-[![build](https://github.com/Reterics/contract-templates/actions/workflows/npm-publish-github-packages.yml/badge.svg)](https://github.com/Reterics/contract-templates/actions/workflows/npm-publish-github-packages.yml)
+[![build](https://github.com/Reterics/contract-templates/actions/workflows/node.js.yml/badge.svg)](https://github.com/Reterics/contract-templates/actions/workflows/node.js.yml)
 
 This is a [Next.js](https://nextjs.org/) project with [TailwindCSS](https://tailwindcss.com/) and [Firebase](https://firebase.google.com/) where we can create, manage our dynamic contracts and documents.
 
