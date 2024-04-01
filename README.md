@@ -2,7 +2,7 @@
 
 [![build](https://github.com/Reterics/contract-templates/actions/workflows/node.js.yml/badge.svg)](https://github.com/Reterics/contract-templates/actions/workflows/node.js.yml)
 
-This is a [Next.js](https://nextjs.org/) project with [TailwindCSS](https://tailwindcss.com/) and [Firebase](https://firebase.google.com/) where we can create, manage our dynamic contracts and documents.
+This is a [Vite.JS](https://vitejs.dev/) React project with [TailwindCSS](https://tailwindcss.com/) and [Firebase](https://firebase.google.com/) where we can create, manage our dynamic contracts and documents.
 
 By allowing users to craft a single template that can be populated with different data, this application can significantly reduce the time and effort required for initial administrative tasks. This efficiency not only accelerates the contract generation process but also ensures consistency and accuracy across all documents. Such tools are invaluable in today's fast-paced business environment where agility and time-saving strategies are key to staying competitive.
 
