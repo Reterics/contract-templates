@@ -24,7 +24,7 @@ export default function GeneralModal({
                 <form className="flex flex-col">
                     {children}
                 </form>
-                <div className="flex justify-between">
+                <div className="flex justify-between mt-2">
                     {
                         (buttons||[]).map(button=> (
                             <button type="button"

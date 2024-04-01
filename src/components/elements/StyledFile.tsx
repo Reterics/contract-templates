@@ -19,7 +19,7 @@ export default function StyledFile({
     };
 
     return (
-        <div className="relative z-0 w-full group mt-4">
+        <div className="relative z-0 w-full group mt-3">
 
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    htmlFor={name}>{label || name}</label>

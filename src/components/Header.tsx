@@ -1,18 +1,20 @@
 import {NavLink, useLocation} from "react-router-dom";
 import {AuthContext} from "../store/AuthContext.tsx";
 import {useContext} from "react";
+import {useThemeDetector} from "../utils/reactUtils.ts";
 
 
 const Header = () => {
     const pathname = useLocation().pathname;
     const  {SignOut, user} = useContext(AuthContext);
+    const isDarkTheme = useThemeDetector();
 
     return (
         <header>
             <nav className="w-full bg-white border-gray-200 dark:bg-gray-900">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="https://reterics.com/" className="flex items-center">
-                        <img src="/logo.png" width={30} height={32} className="h-8 mr-3" alt="Reterics Logo"/>
+                        <img src={isDarkTheme ? "/logo_white.png" : "/logo.png"} width={30} height={32} className="h-8 mr-3" alt="Reterics Logo"/>
                         <div
                             className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white flex-row flex">Contract
                             <div className="text-sm pt-1 text">Templates</div></div>
@@ -44,7 +46,7 @@ const Header = () => {
                                 >Templates</NavLink>
                             </li>
                             <li className="font-normal">
-                                Welcome {user?.displayName}
+                                Welcome {user?.displayName || user?.email}
                                 <button onClick={() => SignOut()} className="font-medium ml-3">Logout</button>
                             </li>
                         </ul>

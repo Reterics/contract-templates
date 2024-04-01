@@ -10,6 +10,7 @@ import TemplateModal from "./components/modals/TemplateModal.tsx";
 import {deleteFile, getFileFromStorage, uploadFile, uploadFileString} from "./firebase/storage.ts";
 import {useNavigate} from "react-router-dom";
 import TableViewComponent, {TableViewActions} from "./components/elements/TableViewComponent.tsx";
+import {BsFillPlusCircleFill} from "react-icons/bs";
 
 
 function Templates() {
@@ -100,14 +101,14 @@ function Templates() {
             <Header />
             <div className="flex justify-center overflow-x-auto shadow-md sm:rounded-lg w-full m-auto mt-2">
                 <div className="flex justify-between max-w-screen-xl m-2 p-2 w-full">
-                    <div />
+                    <h1 className="text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white">Templates</h1>
                     <button type="button"
                             className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none
-                            focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2
+                            focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-5 py-2.5 mr-2
                             dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                             onClick={() => setShowModal(true)}
                     >
-                        Create Template
+                        <BsFillPlusCircleFill />
                     </button>
                 </div>
             </div>

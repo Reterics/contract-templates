@@ -5,6 +5,7 @@ export default {
       './src/App.tsx',
       './src/Editor.tsx',
       './src/main.tsx',
+      './src/Templates.tsx',
   ],
   theme: {
     extend: {},

@@ -1,8 +1,9 @@
 import { MouseEventHandler } from "react";
 import {TableViewActionArguments, TableViewArguments, TableViewLineArguments} from "../../interfaces/interfaces.ts";
 import {
+    BsFileCodeFill,
     BsFileText,
-    BsFillFileEarmarkFill,
+    BsFillFileEarmarkFill, BsFillFolderFill,
     BsFillPrinterFill,
     BsFillTrashFill,
     BsFloppyFill,
@@ -17,8 +18,8 @@ const TableViewHeader = ({header}: { header?: string[] }) => {
     return (
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-            {header.map(head => (
-                <th scope="col" className="px-6 py-3">
+            {header.map((head, index) => (
+                <th scope="col" className={index === header.length-1 ? "px-6 py-3 text-right" : "px-6 py-3"}>
                     {head}
                 </th>
             ))}
@@ -30,7 +31,8 @@ const TableViewHeader = ({header}: { header?: string[] }) => {
 const TableViewLine = ({line, index}: TableViewLineArguments) => {
     return (line.map((column, columnIndex) => (
         <th scope="row" key={'column_' + columnIndex + '_' + index}
-            className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white p-2">
+            className={"px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white p-2" +
+                (columnIndex === line.length - 1 ? " text-right" : "")}>
             {column}
         </th>
     )));
@@ -39,14 +41,16 @@ const TableViewLine = ({line, index}: TableViewLineArguments) => {
 
 export const TableViewActions = ({
     onPaste,
+    onOpen,
     onEdit,
     onRemove,
     onCreate,
     onPrint,
     onSave,
+    onCode,
 }: TableViewActionArguments) => {
-    const first = onCreate || onSave || onPaste || onEdit || onRemove || onPrint;
-    const last = onPrint || onRemove || onEdit || onPaste || onSave || onCreate;
+    const first = onCreate || onOpen || onSave || onCode || onPaste || onEdit || onRemove || onPrint;
+    const last = onPrint || onRemove || onEdit || onPaste || onCode || onSave || onOpen || onCreate;
 
     const getClass = (selected: MouseEventHandler<HTMLButtonElement> | undefined) => {
         if (selected === first) {
@@ -61,7 +65,9 @@ export const TableViewActions = ({
     return (
         <div className="inline-flex rounded-md shadow-sm" role="group">
             {onCreate && <button type="button" className={getClass(onCreate)} onClick={onCreate}><BsFillFileEarmarkFill /></button> }
+            {onOpen && <button type="button" className={getClass(onOpen)} onClick={onOpen}><BsFillFolderFill /></button> }
             {onSave && <button type="button" className={getClass(onSave)} onClick={onSave}><BsFloppyFill /></button> }
+            {onCode && <button type="button" className={getClass(onCode)} onClick={onCode}><BsFileCodeFill /></button> }
             {onPaste && <button type="button" className={getClass(onPaste)} onClick={onPaste}><BsFileText /></button> }
             {onEdit && <button type="button" className={getClass(onEdit)} onClick={onEdit}><BsPencilSquare /></button> }
             {onRemove && <button type="button" className={getClass(onRemove)} onClick={onRemove}><BsFillTrashFill /></button> }

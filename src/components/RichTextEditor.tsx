@@ -20,7 +20,7 @@ const RichTextEditor = ({text, setText}: {text?: string, setText?: Function}) =>
         }
     };
     return (
-        <>
+        <div className="min-h-[400px]">
             <Editor
                 init={{plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
@@ -33,10 +33,15 @@ const RichTextEditor = ({text, setText}: {text?: string, setText?: Function}) =>
                 onDirty={() => setDirty(true)}
             />
             <div className="p-1 flex flex-row justify-between z-10">
-                <button className="flex" onClick={save} type="button">Finalize</button>
+                <button
+                    className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                    onClick={save}
+                    type="button"
+                >Finalize</button>
+
                 {dirty && <p>You have unsaved content!</p>}
             </div>
-        </>
+        </div>
     );
 };
 

@@ -1,5 +1,5 @@
 import {useSearchParams} from "react-router-dom";
-import {useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {GeneralStringObject, Template} from "./interfaces/interfaces.ts";
 import Header from "./components/Header.tsx";
 import {getFileFromStorage} from "./firebase/storage.ts";
@@ -8,32 +8,43 @@ import {render} from "@redaty/lejs"
 import StyledInput from "./components/elements/StyledInput.tsx";
 import {downloadAsFile} from "./utils/general.ts";
 import "./Editor.css";
-import {BsFillFileEarmarkFill, BsFillPrinterFill, BsFloppyFill } from "react-icons/bs";
+import {AuthContext} from "./store/AuthContext.tsx";
+import SignInComponent from "./components/SignIn.tsx";
+import PageLoading from "./components/PageLoading.tsx";
+import {TableViewActions} from "./components/elements/TableViewComponent.tsx";
 
 
 const Editor = () => {
+    const {user, loading} = useContext(AuthContext);
     let [searchParams] = useSearchParams();
 
     const id = searchParams && searchParams.get('id') ?  searchParams.get('id') : undefined;
-    const [template, setTemplate] = useState<Template|null>(null);
+    // Handle null and undefined differently to avoid infinite Rest API loops
+    const [template, setTemplate] = useState<Template|null|undefined>(undefined);
     const [formData, setFormData] = useState<GeneralStringObject>({});
     const targetRef = useRef(null);
+
+    if (!user) return <SignInComponent />;
+    if (loading) return (<><Header /><PageLoading/></>);
 
     const updateFromCloud = async (id: string) => {
         const template = await getFileFromStorage(id);
         if (template) {
             setTemplate({ ...template } as Template);
+        } else {
+            setTemplate(null);
         }
     };
 
     useEffect(() => {
-        if (id && !template) {
+        if (id && template === undefined) {
             void updateFromCloud(id);
         }
     }, [id]);
 
     if (!id) return (<><Header /><p>404 - There is no id provided</p></>);
-    if (!template) return (<><Header /><p>400 - No Valid Template</p></>);
+    if (template === null) return (<><Header /><p>400 - No Valid Template</p></>);
+    if (template === undefined) return (<><Header /><PageLoading/></>);
     if (!template.content) return (<><Header /><p>404 - No Valid Template Content</p></>);
 
 
@@ -54,12 +65,26 @@ const Editor = () => {
         })
     }
 
+    const extractFileName = (path?: string) => {
+        if (!path) {
+            return '';
+        }
+        return path
+            .replace('files/', '')
+            .replace('.txt', '');
+    };
+
     const download = () => {
-        downloadAsFile(template.path ? template.path
-                .replace('files/', '')
-                .replace('.txt', '.html')
-            : '', renderedContent);
-    }
+        downloadAsFile(extractFileName(template.path) + ".html", renderedContent);
+    };
+
+    const exportCode = ()=> {
+        downloadAsFile(extractFileName(template.path) + ".json", JSON.stringify(formData));
+    };
+
+    const reset = () => {
+        setFormData({});
+    };
 
     const print = () => {
         if (window && window.print) {
@@ -70,28 +95,18 @@ const Editor = () => {
     return (
         <>
             <Header />
-            <div className="flex flex-row justify-between mt-4 no-print pb-4">
+            <div className="flex flex-row justify-between mt-2 no-print pb-4 p-2">
                 <div></div>
                 <div>
                     <h1>{template?.name || 'Template'}</h1>
                 </div>
                 <div>
-                    <div className="inline-flex rounded-md shadow-sm" role="group">
-                        <button type="button"
-                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                            <BsFillFileEarmarkFill />
-                        </button>
-                        <button type="button"
-                                onClick={()=>download()}
-                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                            <BsFloppyFill />
-                        </button>
-                        <button type="button"
-                                onClick={()=>print()}
-                                className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
-                            <BsFillPrinterFill />
-                        </button>
-                    </div>
+                    {TableViewActions({
+                        onCreate: () => reset(),
+                        onSave: () => download(),
+                        onCode: () => exportCode(),
+                        onPrint: () => print()
+                    })}
                 </div>
             </div>
             <form className="flex flex-row">

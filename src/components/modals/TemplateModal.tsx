@@ -74,17 +74,21 @@ export default function TemplateModal({
         <GeneralModal title={title || "Template Modal"} buttons={buttons}>
 
             <div className="w-full max-w-screen-lg p-6 bg-white border border-gray-200 rounded-lg shadow
-                        dark:bg-gray-800 dark:border-gray-700 mr-1 pt-9">
+                        dark:bg-gray-800 dark:border-gray-700 mr-1 pt-9 pb-2">
 
-                <StyledInput
-                    type="text" name="name"
-                    value={template.name}
-                    onChange={(e) => changeType(e, 'name')}
-                    label="Template name"
-                />
-                <StyledFile name="model" label={"Model " +
-                    (template.path ? "("+template.path.replace('files/','')+")" : "")
-                } onChange={(file: File)=>setFile(file)} />
+                <div className="grid gap-6 mb-6 md:grid-cols-2">
+                    <div className="mt-4">
+                        <StyledInput
+                            type="text" name="name"
+                            value={template.name}
+                            onChange={(e) => changeType(e, 'name')}
+                            label="Template name"
+                        />
+                    </div>
+                    <StyledFile name="model" label={"Model " +
+                        (template.path ? "("+template.path.replace('files/','')+")" : "")
+                    } onChange={(file: File)=>setFile(file)} />
+                </div>
                 <RichTextEditor text={template.content || ''} setText={setText}/>
             </div>
         </GeneralModal>

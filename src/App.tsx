@@ -57,7 +57,12 @@ function App() {
         <>
             <Header />
             {loading && <PageLoading/>}
-
+            <div className="flex justify-center overflow-x-auto shadow-md sm:rounded-lg w-full m-auto mt-2">
+                <div className="flex justify-between max-w-screen-xl m-2 p-2 w-full">
+                    <h1 className="text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-4xl dark:text-white">Documents</h1>
+                    <div />
+                </div>
+            </div>
             <div className="flex justify-center overflow-x-auto shadow-md sm:rounded-lg w-full m-auto mt-2">
                 <TableViewComponent lines={tableLines} header={['ID', 'Name', 'Action']}/>
             </div>

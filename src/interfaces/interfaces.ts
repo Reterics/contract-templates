@@ -56,16 +56,19 @@ export type TableLineElementType = string | React.ReactNode;
 export type TableLineType = TableLineElementType[];
 
 export interface TableViewLineArguments {
-    line: TableLineType, index: number
+    line: TableLineType
+    index: number
 }
 
 export interface TableViewActionArguments extends TSXComponentArgument {
     onPaste?: MouseEventHandler<HTMLButtonElement>
+    onOpen?: MouseEventHandler<HTMLButtonElement>
     onEdit?: MouseEventHandler<HTMLButtonElement>
     onRemove?: MouseEventHandler<HTMLButtonElement>
     onCreate?: MouseEventHandler<HTMLButtonElement>
     onPrint?: MouseEventHandler<HTMLButtonElement>
     onSave?: MouseEventHandler<HTMLButtonElement>
+    onCode?: MouseEventHandler<HTMLButtonElement>
 }
 export interface TableViewArguments extends TSXComponentArgument {
     lines: TableLineType[]
